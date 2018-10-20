@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MyFirstMap</string>
+    <string name="google_maps_api_key">AIzaSyCQgRQwXgw_sRspuDq8UcrEGGoUsa_I7v4</string>
+    <string name="map">Map</string>
+    <string name="get_long_lat">Show</string>
+    <string name="text"> Longitude = null
+    \n
+    Lattitude = null</string>
+</resources>
