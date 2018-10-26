@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">Job Scheduler</string>
-    <string name="button_1">Schedule Job</string>
-    <string name="button_2">Cancel Job</string>
-    <string name="textview">Enter username</string>
-    <string name="button_3">Set Username</string>
-</resources>

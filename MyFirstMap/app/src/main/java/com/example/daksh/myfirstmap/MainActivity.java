@@ -82,11 +82,6 @@ import static com.example.daksh.myfirstmap.MapActivity.*;
         longitude = prefs.getFloat(LONGITUDE, 0);
         lattitude = prefs.getFloat(LATTITUDE,0);
 
-        if(longitude != 0){
-            if(lattitude != 0){
-                textView.setText("Lattitude : " + lattitude + "\nLongitude = " + longitude);
-            }
-        }
     }
 
 

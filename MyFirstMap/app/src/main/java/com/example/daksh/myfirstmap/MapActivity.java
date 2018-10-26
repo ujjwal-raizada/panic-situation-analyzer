@@ -127,7 +127,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
-        mapFragment.getMapAsync(MapActivity.this);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(MapActivity.this);
+        }
     }
 
     private void getLocationPermission(){
