@@ -31,4 +31,5 @@ This detection will be based on:
 1. Android Studio
 2. Django Web Framework
 3. Visual Studio Code
-4. More
+4. Azure Ubuntu VM
+5. Tensorflow/Keras
