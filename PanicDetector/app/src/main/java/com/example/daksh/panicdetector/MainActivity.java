@@ -1,10 +1,15 @@
 package com.example.daksh.panicdetector;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +19,28 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.Api.ApiOptions;
+import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.ActivityRecognitionClient;
+import com.google.android.gms.location.ActivityTransition;
+import com.google.android.gms.location.ActivityTransitionEvent;
+import com.google.android.gms.location.ActivityTransitionRequest;
+import com.google.android.gms.location.ActivityTransitionResult;
+import com.google.android.gms.location.DetectedActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.android.gms.common.api.Api.ApiOptions.*;
+
+public class MainActivity extends AppCompatActivity{
 
     public EditText editText;
 
@@ -28,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         editText = (EditText)findViewById(R.id.edittext);
 
-
         getLocationPermission();
         //Check permission runtime
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -37,30 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /*public void scheduleJob(View view){
-        ComponentName componentName = new ComponentName(this, ExampleJobService.class);
-        JobInfo info = new JobInfo.Builder(123, componentName)
-                .setPersisted(true)
-                .setPeriodic(15*60*1000)
-                .build();
-
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        int resultCode = scheduler.schedule(info);
-        if(resultCode == JobScheduler.RESULT_SUCCESS){
-            Log.d(TAG, "scheduleJob: Job Scheduled");
-        }
-        else{
-            Log.d(TAG, "scheduleJob: Job Scheduling Failed");
-        }
-
-    }
-
-    public void cancelJob(View view){
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        scheduler.cancel(123);
-        Log.d(TAG, "cancelJob: Job Cancelled");
-
-    }*/
 
     private void getLocationPermission(){
         Log.d(TAG, "getLocationPermission: getting location permissions");
@@ -112,11 +113,21 @@ public class MainActivity extends AppCompatActivity {
         int resultCode = scheduler.schedule(info);
         if(resultCode == JobScheduler.RESULT_SUCCESS){
             Log.d(TAG, "scheduleJob: Job Scheduled");
-            Toast.makeText(this,"Detection started successfully",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Panic Detection started successfully",Toast.LENGTH_LONG).show();
         }
         else{
             Log.d(TAG, "scheduleJob: Job Scheduling Failed");
         }
         editText.setText("Enter Username");
+
+        Intent intent = new Intent(this, Map.class);
+        startActivity(intent);
     }
+
+    public void register(View view){
+        Intent intent = new Intent(this, Register.class);
+        startActivity(intent);
+    }
+
+
 }

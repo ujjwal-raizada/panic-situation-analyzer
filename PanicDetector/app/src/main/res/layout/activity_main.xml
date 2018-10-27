@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -36,5 +36,20 @@
         android:textColor="@color/black"
         android:textStyle="italic"
         android:onClick="setUsername"/>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="155dp"
+        android:background="@drawable/background_2"
+        android:text="@string/register_button"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:textStyle="italic"
+        android:onClick="register"/>
+
 
 </RelativeLayout>

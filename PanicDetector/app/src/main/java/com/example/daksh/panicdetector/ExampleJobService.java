@@ -2,20 +2,28 @@ package com.example.daksh.panicdetector;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -29,10 +37,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.Iterator;
 import java.util.Map;
 
-public class ExampleJobService extends JobService {
+public class ExampleJobService extends JobService implements GoogleApiClient.ConnectionCallbacks {
 
     private LocationRequest mLocationRequest;
     private static Context context;
+    public GoogleApiClient mApiClient;
+
 
     private long UPDATE_INTERVAL = 10 * 1000;
     private long FASTEST_INTERVAL = 2 * 1000;
@@ -40,7 +50,9 @@ public class ExampleJobService extends JobService {
     public static String username = "Daksh";
     public static String longitude = "0";
     public static String latitude = "0";
-    public final static String url = "http://172.16.229.42:8000/api/location/";
+    public static  String url = "http://noobly-hallows.westus.cloudapp.azure.com/codefundo/api/location/";
+
+    public static boolean running = false;
 
 
     private static final String TAG = "ExampleJobService";
@@ -65,6 +77,7 @@ public class ExampleJobService extends JobService {
                     }
 
                     startLocationUpdates();
+                    startRunningDetection();
                     sendDataToServer();
 
                     try {
@@ -183,11 +196,19 @@ public class ExampleJobService extends JobService {
 
         final Map<String, String> json_value = json;
 
-
         StringRequest MyStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                if(response.startsWith("Server")){
+                    Log.d(TAG, "onResponse: Server Response = " + response);
+                }
+                else{
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(ExampleJobService.getAppContext());
+                    builder.setContentText( response );
+                    builder.setSmallIcon( R.mipmap.ic_launcher );
+                    builder.setContentTitle("PANIC DETECTED");
+                    NotificationManagerCompat.from(ExampleJobService.getAppContext()).notify(0, builder.build());
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -203,5 +224,26 @@ public class ExampleJobService extends JobService {
 
 
         MySingleton.getInstance(ExampleJobService.getAppContext()).addToRequestQueue(MyStringRequest);
+    }
+
+    public void startRunningDetection(){
+        mApiClient = new GoogleApiClient.Builder(this)
+                .addApi(ActivityRecognition.API)
+                .addConnectionCallbacks(this)
+                .build();
+
+        mApiClient.connect();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Intent intent = new Intent( this, ActivityRecognizedService.class );
+        PendingIntent pendingIntent = PendingIntent.getService( this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
+        ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates( mApiClient, 3000, pendingIntent );
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 }
