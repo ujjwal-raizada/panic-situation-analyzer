@@ -4,6 +4,7 @@ This project aims to build an app to help people during panic situations by esco
 This project is built as a part of Microsoft's codefundo++ hackathon.
 
 
+Link to Documentation: [Link](Documentation.md)
 
 
 ## Team:
