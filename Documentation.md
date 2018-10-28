@@ -14,15 +14,23 @@ The web interface allows people to see the current disaster areas over the globe
 #### REST API
 The server provides a REST API framework, making it easier to build cross-platform applications.
 
+End-points of REST-API:
+1. ```/api/location/``` for sending real-time location to the server.
+2. ```/api/paniclocation/``` for sending real-time location during panic situations with less frequency.
+
+We have currently used HTTP for sending location data, but for actual deployment we have to use HTTPS for security.
+
 
 ## How it Works
-The Android application constantly monitors the user's position in real time. When the user starts moving, the app sends this information to the server.
+The Android application constantly monitors the user's position in real time and sends it to the server. When the user starts running, the app informs the server of probable panic.
 
-Once the server receives this data, it applies a computational geometry algorithm to determine the number of users moving about in that given area.
+Once the server receives this data, it applies a computational geometry algorithm to determine the the center of the probable panic and find the relative points w.r.t center.
 
-If this number of users exceeds a certain threshold, the algorithm regards this as an area of interest, and a neural network is used to determine whether it is actually a disaster, and what type of disaster it is.
+If this number of users exceeds a certain threshold, the algorithm regards this as an area of interest, and a neural network is used to determine whether it is actually a disaster, and what type of disaster it is, based on the motion the crowd follows.
 
-If it is concluded that it is a disaster, the server sends a message to the app to notify the user about the current situation, and displays a map showing the affected areas.
+If it is concluded that it is a disaster, the server sends a message to the app to notify the user within certain threshold radius about the current situation, and displays a map showing the affected areas.
+
+This is how we instantly notify users of probable disasters before-hand, and this gives them a lot more time to prepare and eventually save their lives.
 
 
 ## Open-Source Libraries and Datasets Used
