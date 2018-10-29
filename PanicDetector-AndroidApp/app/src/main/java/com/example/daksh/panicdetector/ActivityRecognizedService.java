@@ -70,6 +70,7 @@ public class ActivityRecognizedService extends IntentService {
                 }
                 case DetectedActivity.WALKING: {
                     Log.e( "ActivityRecogition", "Walking: " + activity.getConfidence() );
+                    ExampleJobService.url = "http://noobly-hallows.westus.cloudapp.azure.com/codefundo/api/location/";
                     if( activity.getConfidence() >= 75 ) {
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
                         builder.setContentText( "Are you walking?" );
